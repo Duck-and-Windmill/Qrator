@@ -215,5 +215,20 @@ _:-ms-input-placeholder, :root .demo-graph {
 }
 
 .mdl-layout__header-row {
-  justify-content: center;
+  justify-content: space-between;
+}
+
+#intro-layout {
+  text-align: center;
+}
+
+.mdl-data-table tbody tr:hover {
+    background-color: #424242;
+}
+
+#add-field-wrapper {
+  z-index: 9999;
+  position: fixed;
+  right: 15px;
+  bottom: 15px;
 }

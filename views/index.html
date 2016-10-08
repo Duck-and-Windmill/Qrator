@@ -2,17 +2,31 @@
 
 {% block content %}
 {% if !user %}
-	<h1>Qrator</h1>
-	<form action="/auth/spotify">
-		<button class="mdl-button mdl-js-button mdl-button--raised" type="submit" value="Login" id="authorize">
-		  Login
-		</button>
-	</form>
+	<div class="mdl-layout mdl-js-layout" id="intro-layout">
+		<div class="mdl-grid">
+		  <div class="mdl-cell mdl-cell--12-col">
+		  	<h1>Qrator</h1>
+			<form action="/auth/spotify">
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-color-text--grey-100" type="submit" value="Login" id="authorize">
+				  Login
+				</button>
+			</form>
+		  </div>
+		</div>
+	</div>
 {% else %}
 	<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-header">
       <header class="demo-header mdl-layout__header mdl-color--grey-900 mdl-color-text--grey-100">
         <div class="mdl-layout__header-row">
-          <span class="mdl-layout-title" id="playlist-title">Playlist Name</span>
+	    	<button class="mdl-button mdl-js-button mdl-button--raised mdl-color-text--grey-100 hidden" id="return-to-playlists">
+			  Back
+			</button>
+			<span class="mdl-layout-title" id="playlist-title">Playlist Name</span>
+			<form action="/logout">
+				<button class="mdl-button mdl-js-button mdl-button--raised mdl-color-text--grey-100" type="submit" value="Logout" id="authorize">
+				  Logout
+				</button>
+			</form>
         </div>
       </header>
       <!--div class="demo-drawer mdl-layout__drawer mdl-color--grey-900 mdl-color-text--blue-grey-50">
@@ -53,17 +67,16 @@
                   <th class="mdl-data-table__cell--non-numeric mdl-color-text--grey-100">Album</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td class="mdl-data-table__cell--non-numeric">Acrylic (Transparent)</td>
-                  <td class="mdl-data-table__cell--non-numeric">gasd</td>
-                  <td class="mdl-data-table__cell--non-numeric">sdgha</td>
-                </tr>
-              </tbody>
+              <tbody></tbody>
             </table>
           </div>
         </div>
       </main>
+    </div>
+    <div id="add-field-wrapper" class="hidden">
+    	<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+		  <i class="material-icons">add</i>
+		</button>
     </div>
     <script src="/js/spotify.js"></script>
     <script>

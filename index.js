@@ -9,8 +9,8 @@ var express = require('express'),
 	SpotifyStrategy = require('passport-spotify').Strategy;
 
 var consolidate = require('consolidate');
-var appKey = process.env.APP_KEY;
-var appSecret = process.env.APP_SECRET;
+var appKey = "2073f646f8fd4111af72915c5d70ba7c";//process.env.APP_KEY;
+var appSecret = "52af1bc8f1144335ae5a60a44923fc5b";//process.env.APP_SECRET;
 
 passport.serializeUser(function(user, done) {
   done(null, user);
@@ -23,7 +23,7 @@ var userTokens = {};
 passport.use(new SpotifyStrategy({
   clientID: appKey,
   clientSecret: appSecret,
-  callbackURL: 'https://showerify.herokuapp.com/callback'
+  callbackURL: 'http://localhost:3000/callback'
   },
   function(accessToken, refreshToken, profile, done) {
 	process.nextTick(function () {
@@ -54,10 +54,6 @@ app.get('/', function(req, res){
 
 app.get('/login', function(req, res){
   res.render('login.html', { user: req.user });
-});
-
-app.get('/about', function(req, res){
-  res.render('about.html', { user: req.user });
 });
 
 app.get('/auth/spotify',

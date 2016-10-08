@@ -224,6 +224,7 @@ _:-ms-input-placeholder, :root .demo-graph {
 
 .mdl-data-table tbody tr:hover {
     background-color: #424242;
+    cursor: pointer;
 }
 
 #add-field-wrapper {
@@ -231,4 +232,45 @@ _:-ms-input-placeholder, :root .demo-graph {
   position: fixed;
   right: 15px;
   bottom: 15px;
+}
+
+.mdl-button--fab.mdl-button--colored {
+    background: #23CF5F;
+    color: #333;
+}
+
+.mdl-button--fab.mdl-button--colored:hover {
+    background-color: #28f36f;
+}
+
+.mdl-button--fab.mdl-button--colored:focus:not(:active) {
+    background-color: #1da74d;
+}
+
+.mdl-button--fab.mdl-button--colored:active {
+    background-color: #1da74d;
+}
+
+#add-field-dialog {
+  width: 80vw;
+}
+
+.mdl-textfield__label:after {
+    background-color: #23CF5F;
+}
+
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label, .mdl-textfield--floating-label.is-dirty .mdl-textfield__label, .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+  color: #23CF5F;
+}
+
+.mdl-textfield__input {
+    border-bottom: 1px solid rgba(253,253,253,0.75);
+}
+
+.mdl-textfield__label {
+  color: rgba(253,253,253,0.75);
+}
+
+.mdl-button--icon .mdl-button--colored {
+  color: #23CF5F;
 }

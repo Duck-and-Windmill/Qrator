@@ -1,3 +1,14 @@
+var config = {
+    apiKey: "AIzaSyCTA7HfjLm1Wv8Np1I4eGmmhCOOrvpKmIU",
+    authDomain: "qrator-8ab17.firebaseapp.com",
+    databaseURL: "https://qrator-8ab17.firebaseio.com",
+    storageBucket: "qrator-8ab17.appspot.com",
+    messagingSenderId: "654902851014"
+  };
+  firebase.initializeApp(config);
+
+var database = firebase.database();
+
 function hasClass(el, className) {
   if (el.classList)
 	return el.classList.contains(className)
@@ -26,6 +37,7 @@ window.onload = function() {
 	var currentPlaylistTitle = document.querySelector("#playlist-title");
 	var backToPlaylists = document.querySelector("#return-to-playlists");
 	var addFieldWrapper = document.querySelector("#add-field-wrapper");
+	var inSongView = false;
 	var spotifyApi = new SpotifyWebApi();
 	var playlistids = {};
 	spotifyApi.setAccessToken(accessToken);
@@ -53,6 +65,7 @@ window.onload = function() {
 						removeClass(songTable, "hidden");
 						removeClass(backToPlaylists, "hidden");
 						removeClass(addFieldWrapper, "hidden");
+						inSongView = true;
 					}, function(err) {
 						console.error(err);
 					});
@@ -62,4 +75,23 @@ window.onload = function() {
 	}, function(err) {
 		console.error(err);
 	});
+
+	backToPlaylists.addEventListener('click', function() {
+		if (inSongView) {
+			songList.innerHTML = "";
+			removeClass(playlistTable, "hidden");
+			addClass(songTable, "hidden");
+			addClass(backToPlaylists, "hidden");
+			addClass(addFieldWrapper, "hidden");
+		}
+	});
+
+	var addFieldDialog = document.querySelector('#add-field-dialog');
+    var addFieldButton = document.querySelector('#add-field-button');
+    addFieldButton.addEventListener('click', function() {
+      addFieldDialog.showModal();
+    });
+    addFieldDialog.querySelector('.close').addEventListener('click', function() {
+      addFieldDialog.close();
+    });
 }

@@ -13,8 +13,6 @@
     "url": "git+https://github.com/Duck-and-Windmill/Qrator.git"
   },
   "dependencies": {
-    "express": "^4.13.4",
-    "playmusic": "^2.1.1",
-    "socket.io": "^1.4.5"
+    "express": "^4.13.4"
   }
 }

@@ -11,6 +11,7 @@ html, body {
 .demo-layout .demo-header .mdl-textfield {
   padding: 0px;
   margin-top: 41px;
+  height: 100%;
 }
 .demo-layout .demo-header .mdl-textfield .mdl-textfield__expandable-holder {
   bottom: 19px;

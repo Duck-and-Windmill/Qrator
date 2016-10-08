@@ -79,10 +79,12 @@ window.onload = function() {
 	backToPlaylists.addEventListener('click', function() {
 		if (inSongView) {
 			songList.innerHTML = "";
+			currentPlaylistTitle.innerHTML = "Playlists";
 			removeClass(playlistTable, "hidden");
 			addClass(songTable, "hidden");
 			addClass(backToPlaylists, "hidden");
 			addClass(addFieldWrapper, "hidden");
+			inSongView = false;
 		}
 	});
 

@@ -21,7 +21,7 @@
 			<button class="mdl-button mdl-js-button mdl-button--raised mdl-color-text--grey-100 hidden" id="return-to-playlists">
 				Back
 			</button>
-			<span class="mdl-layout-title" id="playlist-title"></span>
+			<span class="mdl-layout-title" id="playlist-title">Playlists</span>
 			<form action="/logout">
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-color-text--grey-100" type="submit" value="Logout" id="authorize">
 					Logout
@@ -94,7 +94,7 @@
 <script src="/js/spotify.js"></script>
 <script>
 	{% autoescape false %}
-	var userdata = {{ user }};
+	var userdata = {{ user | safe | json }};
 	console.log(userdata);
 	var username = "{{ user.id }}";
 	var accessToken = "{{ accessToken }}";

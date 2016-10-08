@@ -1,0 +1,20 @@
+{
+  "name": "qrator",
+  "version": "0.0.1",
+  "description": "Qrator allows users to classify songs the way they want.",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "Duck & Windmill",
+  "license": "MIT",
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Duck-and-Windmill/Qrator.git"
+  },
+  "dependencies": {
+    "express": "^4.13.4",
+    "playmusic": "^2.1.1",
+    "socket.io": "^1.4.5"
+  }
+}

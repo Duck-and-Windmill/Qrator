@@ -271,6 +271,25 @@ _:-ms-input-placeholder, :root .demo-graph {
   color: rgba(253,253,253,0.75);
 }
 
-.mdl-button--icon .mdl-button--colored {
+.mdl-button.mdl-button--icon.mdl-button--colored {
   color: #23CF5F;
+}
+
+::-webkit-scrollbar {
+  background-color: #212121;
+  cursor: pointer;
+width: 10px;
+height: 10px;
+}
+::-webkit-scrollbar-button:start:decrement,
+::-webkit-scrollbar-button:end:increment  {
+display: none;
+}
+
+::-webkit-scrollbar-track-piece  {
+background-color: #212121;
+}
+::-webkit-scrollbar-thumb:vertical {
+background-color: #424242;
+cursor: pointer;
 }

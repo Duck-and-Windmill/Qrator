@@ -68,8 +68,8 @@
 							<label class="mdl-textfield__label" for="sample2">Number...</label>
 							<span class="mdl-textfield__error">Input is not a number!</span>
 						</div>
-						<button class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
-						  <i class="material-icons">mood</i>
+						<button type="button" class="mdl-button mdl-js-button mdl-button--icon mdl-button--colored">
+						  <i class="material-icons">clear</i>
 						</button>
 					</div>
 				</div>
@@ -86,7 +86,7 @@
 </dialog>
 <div id="add-field-wrapper" class="hidden">
 	<button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" id="add-field-button">
-		<i class="material-icons">add</i>
+		<i class="material-icons">settings</i>
 	</button>
 </div>
 <script src="//code.getmdl.io/1.2.1/material.min.js"></script>
@@ -94,7 +94,9 @@
 <script src="/js/spotify.js"></script>
 <script>
 	{% autoescape false %}
-	var username = "{{ user.id }}"
+	var userdata = {{ user }};
+	console.log(userdata);
+	var username = "{{ user.id }}";
 	var accessToken = "{{ accessToken }}";
 	{% endautoescape %}
 </script>

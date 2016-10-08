@@ -213,10 +213,6 @@ _:-ms-input-placeholder, :root .demo-graph {
   width: 100%;
 }
 
-#playlist-title {
-  text-align: center;
-}
-
-.mdl-layout__header {
-  text-align: center;
+.mdl-layout__header-row {
+  justify-content: center;
 }

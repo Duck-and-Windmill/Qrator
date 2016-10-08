@@ -13,6 +13,7 @@
     "url": "git+https://github.com/Duck-and-Windmill/Qrator.git"
   },
   "dependencies": {
-    "express": "^4.13.4"
+    "express": "^4.13.4",
+    "spotify-web-api-node": "^2.3.5"
   }
 }

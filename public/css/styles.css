@@ -210,7 +210,7 @@ _:-ms-input-placeholder, :root .demo-graph {
           align-items: center;
 }
 
-#song-list {
+#song-list, #playlists {
   width: 100%;
 }
 

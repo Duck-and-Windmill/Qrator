@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Qrator allows users to classify songs the way they want.",
   "scripts": {
-    "start": "nodemon -e js,html index.js"
+    "start": "node index.js"
   },
   "author": "Duck & Windmill",
   "license": "MIT",

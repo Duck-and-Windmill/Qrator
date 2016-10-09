@@ -23,7 +23,7 @@ var userTokens = {};
 passport.use(new SpotifyStrategy({
   clientID: appKey,
   clientSecret: appSecret,
-  callbackURL: 'https://qrator.com/callback'
+  callbackURL: 'http://localhost:3000/callback'
   },
   function(accessToken, refreshToken, profile, done) {
 	process.nextTick(function () {

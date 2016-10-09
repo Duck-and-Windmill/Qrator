@@ -23,6 +23,13 @@ var addNewField = document.querySelector("#add-new-field");
 var removeCriteriaButtons = document.querySelectorAll('.remove-criteria');
 var editValueButtons = document.querySelectorAll('.criteria-value');
 var editValueDialog = document.querySelector('#edit-value-dialog');
+var currentSongId, currentCriteriaName;
+var inSongView = false;
+var spotifyApi = new SpotifyWebApi();
+var playlistIds = {};
+var currentPlaylistId;
+var playlistData;
+var currentSongList;
 
 function hasClass(el, className) {
   if (el.classList)
@@ -67,22 +74,83 @@ function reloadEditValueButtons() {
 	editValueButtons = document.querySelectorAll('.criteria-value');
 	for (var i = 0; i < editValueButtons.length; i++) {
 		editValueButtons[i].addEventListener('click', function(){
+			currentSongId = this.dataset.songid;
+			currentCriteriaName = this.dataset.criterianame;
 			editValueDialog.showModal();
 		});
 	}
 }
 
+
 editValueDialog.querySelector('.close').addEventListener('click', function() {
-  editValueDialog.close();
+	editValueDialog.close();
+});
+
+editValueDialog.querySelector('.save').addEventListener('click', function() {
+	playlistData.songs[currentSongId][currentCriteriaName].value = editValueDialog.querySelector("#sample2").value;
+	database.ref('/playlists/' + currentPlaylistId).set(playlistData, function(err){
+		songList.innerHTML = "";
+		addFieldDialog.querySelector('.mdl-grid').innerHTML = "";
+		songTable.querySelector("thead tr").innerHTML = '<th class="mdl-color-text--grey-100 mdl-data-table__cell--non-numeric">Title<th class="mdl-color-text--grey-100 mdl-data-table__cell--non-numeric">Artist<th class="mdl-color-text--grey-100 mdl-data-table__cell--non-numeric">Album';
+		database.ref('/playlists/' + currentPlaylistId).once('value').then(function(snapshot){
+			if (snapshot.val() === null) {
+				playlistData = {
+					"name": data.name,
+					"criteria": {
+						"rating": {
+				  			"name": "rating",
+				  			"maxValue": 5
+				  		}
+					},
+					"songs": {}
+				};
+			} else {
+				playlistData = snapshot.val();
+				//console.log(playlistData.criteria)
+				Object.keys(playlistData.criteria).forEach(function(key,index) {
+					var th = document.createElement('th');
+					th.setAttribute('class', 'mdl-data-table__cell--non-numeric mdl-color-text--grey-100');
+					th.innerHTML = playlistData.criteria[key].name.capitalizeFirstLetter();
+					songTable.querySelector('thead tr').appendChild(th);
+					var content = document.createElement('div');
+					content.setAttribute('id', 'criteria-row-' + playlistData.criteria[key].name);
+					addClass(content, "row");
+					content.innerHTML = '<div class="mdl-cell mdl-cell--12-col"><div class="mdl-js-textfield mdl-textfield mdl-textfield--floating-label"><input value="' + playlistData.criteria[key].name + '" class="mdl-textfield__input name" id="criteria-' + playlistData.criteria[key].name + '"><label class=mdl-textfield__label for="criteria-' + playlistData.criteria[key].name + '">Name</label></div><div class="mdl-js-textfield mdl-textfield mdl-textfield--floating-label"><input value="' + playlistData.criteria[key].maxValue + '" class="mdl-textfield__input num" id="criteria-' + playlistData.criteria[key].name + '-maxValue"pattern=-?[0-9]*(\.[0-9]+)?><label class=mdl-textfield__label for="criteria-' + playlistData.criteria[key].name + '-maxValue">Max Value</label><span class=mdl-textfield__error>Input is not a number!</span></div><button data-closeid="criteria-row-' + playlistData.criteria[key].name + '" class="remove-criteria mdl-button mdl-button--colored mdl-button--icon mdl-js-button"type=button><i class=material-icons>clear</i></button></div>';
+					addFieldDialog.querySelector('.mdl-grid').appendChild(content);
+					var inputs = document.querySelectorAll('[class^=mdl]');
+					[].forEach.call(inputs, inp => componentHandler.upgradeElement(inp));
+					reloadRemoveCriteriaButtons();
+				});
+			}
+			for (var i = 0; i < currentSongList.length; i++) {
+				var song = currentSongList[i];
+				if (!isReal(playlistData.songs[song.track.id])) {
+					playlistData.songs[song.track.id] = playlistData.criteria;
+					//playlistData.songs[song.track.id].rating.value = 0;
+				}
+				var content = document.createElement('tr');
+				content.innerHTML = '<td class="mdl-data-table__cell--non-numeric">' + song.track.name + '</td><td class="mdl-data-table__cell--non-numeric">'+ song.track.artists[0].name + '</td><td class="mdl-data-table__cell--non-numeric">' + song.track.album.name + '</td>'
+				Object.keys(playlistData.criteria).forEach(function(key,index) {
+					content.innerHTML += '<td class="criteria-value" data-songid="' + song.track.id + '" data-criteriaName="' + key + '">' + playlistData.songs[song.track.id][key].value + '</td>';
+				});
+				songList.appendChild(content);
+				var inputs = document.querySelectorAll('[class^=mdl]');
+				[].forEach.call(inputs, inp => componentHandler.upgradeElement(inp));
+				reloadRemoveCriteriaButtons();
+				reloadEditValueButtons()
+				$(function(){
+				  $("#song-list").tablesorter({'sortReset': true});
+				});
+			}
+		});
+		if (err) {
+			console.error(err);
+		}
+	});
+    editValueDialog.close();
 });
 
 window.onload = function() {
-	var inSongView = false;
-	var spotifyApi = new SpotifyWebApi();
-	var playlistIds = {};
-	var currentPlaylistId;
-	var playlistData;
-
 	spotifyApi.setAccessToken(accessToken);
 	spotifyApi.getUserPlaylists(username).then(function(data) {
 		removeClass(loadingBar, "hidden");
@@ -129,9 +197,9 @@ window.onload = function() {
 								});
 							}
 							currentPlaylistTitle.innerHTML = data.name;
-							var songs = data.tracks.items;
-							for (var i = 0; i < songs.length; i++) {
-								var song = songs[i];
+							currentSongList = data.tracks.items;
+							for (var i = 0; i < currentSongList.length; i++) {
+								var song = currentSongList[i];
 								if (!isReal(playlistData.songs[song.track.id])) {
 									playlistData.songs[song.track.id] = playlistData.criteria;
 									//playlistData.songs[song.track.id].rating.value = 0;
@@ -230,6 +298,60 @@ window.onload = function() {
     	});
     	database.ref('/playlists/' + currentPlaylistId).set(playlistData, function(err){
     		addFieldDialog.close();
+    		songList.innerHTML = "";
+    		addFieldDialog.querySelector('.mdl-grid').innerHTML = "";
+    		songTable.querySelector("thead tr").innerHTML = '<th class="mdl-color-text--grey-100 mdl-data-table__cell--non-numeric">Title<th class="mdl-color-text--grey-100 mdl-data-table__cell--non-numeric">Artist<th class="mdl-color-text--grey-100 mdl-data-table__cell--non-numeric">Album';
+    		database.ref('/playlists/' + currentPlaylistId).once('value').then(function(snapshot){
+				if (snapshot.val() === null) {
+					playlistData = {
+						"name": data.name,
+						"criteria": {
+							"rating": {
+					  			"name": "rating",
+					  			"maxValue": 5
+					  		}
+						},
+						"songs": {}
+					};
+				} else {
+					playlistData = snapshot.val();
+					//console.log(playlistData.criteria)
+					Object.keys(playlistData.criteria).forEach(function(key,index) {
+						var th = document.createElement('th');
+						th.setAttribute('class', 'mdl-data-table__cell--non-numeric mdl-color-text--grey-100');
+						th.innerHTML = playlistData.criteria[key].name.capitalizeFirstLetter();
+						songTable.querySelector('thead tr').appendChild(th);
+						var content = document.createElement('div');
+						content.setAttribute('id', 'criteria-row-' + playlistData.criteria[key].name);
+						addClass(content, "row");
+						content.innerHTML = '<div class="mdl-cell mdl-cell--12-col"><div class="mdl-js-textfield mdl-textfield mdl-textfield--floating-label"><input value="' + playlistData.criteria[key].name + '" class="mdl-textfield__input name" id="criteria-' + playlistData.criteria[key].name + '"><label class=mdl-textfield__label for="criteria-' + playlistData.criteria[key].name + '">Name</label></div><div class="mdl-js-textfield mdl-textfield mdl-textfield--floating-label"><input value="' + playlistData.criteria[key].maxValue + '" class="mdl-textfield__input num" id="criteria-' + playlistData.criteria[key].name + '-maxValue"pattern=-?[0-9]*(\.[0-9]+)?><label class=mdl-textfield__label for="criteria-' + playlistData.criteria[key].name + '-maxValue">Max Value</label><span class=mdl-textfield__error>Input is not a number!</span></div><button data-closeid="criteria-row-' + playlistData.criteria[key].name + '" class="remove-criteria mdl-button mdl-button--colored mdl-button--icon mdl-js-button"type=button><i class=material-icons>clear</i></button></div>';
+						addFieldDialog.querySelector('.mdl-grid').appendChild(content);
+						var inputs = document.querySelectorAll('[class^=mdl]');
+						[].forEach.call(inputs, inp => componentHandler.upgradeElement(inp));
+						reloadRemoveCriteriaButtons();
+					});
+				}
+				for (var i = 0; i < currentSongList.length; i++) {
+					var song = currentSongList[i];
+					if (!isReal(playlistData.songs[song.track.id])) {
+						playlistData.songs[song.track.id] = playlistData.criteria;
+						//playlistData.songs[song.track.id].rating.value = 0;
+					}
+					var content = document.createElement('tr');
+					content.innerHTML = '<td class="mdl-data-table__cell--non-numeric">' + song.track.name + '</td><td class="mdl-data-table__cell--non-numeric">'+ song.track.artists[0].name + '</td><td class="mdl-data-table__cell--non-numeric">' + song.track.album.name + '</td>'
+					Object.keys(playlistData.criteria).forEach(function(key,index) {
+						content.innerHTML += '<td class="criteria-value" data-songid="' + song.track.id + '" data-criteriaName="' + key + '">' + playlistData.songs[song.track.id][key].value + '</td>';
+					});
+					songList.appendChild(content);
+					var inputs = document.querySelectorAll('[class^=mdl]');
+					[].forEach.call(inputs, inp => componentHandler.upgradeElement(inp));
+					reloadRemoveCriteriaButtons();
+					reloadEditValueButtons()
+					$(function(){
+					  $("#song-list").tablesorter({'sortReset': true});
+					});
+				}
+			});
 			if (err) {
 				console.error(err);
 			}

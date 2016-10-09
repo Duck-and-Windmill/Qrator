@@ -6,6 +6,7 @@
 	<div class="mdl-grid">
 		<div class="mdl-cell mdl-cell--12-col">
 			<h1>Qrator</h1>
+			<h3>Everyone's a critic</h3>
 			<form action="/auth/spotify">
 				<button class="mdl-button mdl-js-button mdl-button--raised mdl-color-text--grey-100" type="submit" value="Login" id="authorize">
 					Login
@@ -58,6 +59,11 @@
 		</p>
 		<form action="#">
 			<div class="mdl-grid">
+			<div class="mdl-textfield mdl-js-textfield">
+			    <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2">
+			    <label class="mdl-textfield__label" for="sample2">Number...</label>
+			    <span class="mdl-textfield__error">Input is not a number!</span>
+			  </div>
 			</div>
 			<button id="add-new-field" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-100">
 			  Add Field
@@ -75,9 +81,6 @@
 		<form action="#">
 			<div class="mdl-grid">
 			</div>
-			<button id="add-new-field" type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--grey-100">
-			  Add Field
-			</button>
 		</form>
 	</div>
 	<div class="mdl-dialog__actions">

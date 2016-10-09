@@ -21,6 +21,8 @@ var addFieldDialog = document.querySelector('#add-field-dialog');
 var addFieldButton = document.querySelector('#add-field-button');
 var addNewField = document.querySelector("#add-new-field");
 var removeCriteriaButtons = document.querySelectorAll('.remove-criteria');
+var editValueButtons = document.querySelectorAll('.criteria-value');
+var editValueDialog = document.querySelector('#edit-value-dialog');
 
 function hasClass(el, className) {
   if (el.classList)
@@ -60,6 +62,19 @@ function reloadRemoveCriteriaButtons() {
 		});
 	}
 }
+
+function reloadEditValueButtons() {
+	editValueButtons = document.querySelectorAll('.criteria-value');
+	for (var i = 0; i < editValueButtons.length; i++) {
+		editValueButtons[i].addEventListener('click', function(){
+			editValueDialog.showModal();
+		});
+	}
+}
+
+editValueDialog.querySelector('.close').addEventListener('click', function() {
+  editValueDialog.close();
+});
 
 window.onload = function() {
 	var inSongView = false;
@@ -124,13 +139,13 @@ window.onload = function() {
 								var content = document.createElement('tr');
 								content.innerHTML = '<td class="mdl-data-table__cell--non-numeric">' + song.track.name + '</td><td class="mdl-data-table__cell--non-numeric">'+ song.track.artists[0].name + '</td><td class="mdl-data-table__cell--non-numeric">' + song.track.album.name + '</td>'
 								Object.keys(playlistData.criteria).forEach(function(key,index) {
-									content.innerHTML += playlistData.songs[song.track.id][key].value;
-									//content.innerHTML += '<td><div class="mdl-js-textfield mdl-textfield"><input value="' + playlistData.songs[song.track.id][key].value + '" class=mdl-textfield__input id="derp-' + index + '"pattern=-?[0-9]*(\.[0-9]+)?><label class=mdl-textfield__label for="derp-' + index + '">Val</label></div></td>';
+									content.innerHTML += '<td class="criteria-value" data-songid="' + song.track.id + '" data-criteriaName="' + key + '">' + playlistData.songs[song.track.id][key].value + '</td>';
 								});
 								songList.appendChild(content);
 								var inputs = document.querySelectorAll('[class^=mdl]');
 								[].forEach.call(inputs, inp => componentHandler.upgradeElement(inp));
 								reloadRemoveCriteriaButtons();
+								reloadEditValueButtons()
 								$(function(){
 								  $("#song-list").tablesorter({'sortReset': true});
 								});

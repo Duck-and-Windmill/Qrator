@@ -52,17 +52,13 @@ app.get('/', function(req, res){
   }
 });
 
-app.get('/login', function(req, res){
-  res.render('login.html', { user: req.user });
-});
-
 app.get('/auth/spotify',
   passport.authenticate('spotify', {scope: 'playlist-read-private'}),
   function(req, res){
 });
 
 app.get('/callback',
-  passport.authenticate('spotify', { failureRedirect: '/login' }),
+  passport.authenticate('spotify', { failureRedirect: '/' }),
   function(req, res) {
 	res.redirect('/');
   });
@@ -78,5 +74,5 @@ app.listen((process.env.PORT || 3000), function(){
 
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
+  res.redirect('/');
 }
